@@ -1,24 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>TITLE</title>
-
-  <!-- Leaflet CSS & JS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
-
-  <!-- Our CSS -->
-  <link rel="stylesheet" type="text/css" href="/assts/css/style.css">
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="https://d3js.org/d3.v3.min.js" language="JavaScript"></script>
+    <script src="liquidFillGauge.js" language="JavaScript"></script>
+    <style>
+        .liquidFillGaugeText { font-family: Helvetica; font-weight: bold; }
+    </style>
 </head>
-
 <body>
-  <!-- The div where we will inject our map -->
-  <div id="map"></div>
-
-  <!-- API key -->
-  <!-- <script type="text/javascript" src="config.js"></script> -->
-  <!-- Our JS -->
-  <script type="text/javascript" src="/assets/js/logic.js"></script>
+    <svg id="fillgauge1" width="97%" height="250" onclick="gauge1.update(NewValue());"></svg>
+    <svg id="fillgauge2" width="19%" height="200" onclick="gauge2.update(NewValue());"></svg>
+    <script language="JavaScript">
+        var gauge1 = loadLiquidFillGauge("fillgauge1", 55);
+        var config1 = liquidFillGaugeDefaultSettings();
+        config1.circleColor = "#FF7777";
+        config1.textColor = "#FF4444";
+        config1.waveTextColor = "#FFAAAA";
+        config1.waveColor = "#FFDDDD";
+        config1.circleThickness = 0.2;
+        config1.textVertPosition = 0.2;
+        config1.waveAnimateTime = 2000;
+        var gauge2= loadLiquidFillGauge("fillgauge2", 28, config1);
+        var config2 = liquidFillGaugeDefaultSettings();
+        config2.circleColor = "#D4AB6A";
+        config2.textColor = "#553300";
+        config2.waveTextColor = "#805615";
+        config2.waveColor = "#AA7D39";
+        config2.circleThickness = 0.1;
+        config2.circleFillGap = 0.2;
+        config2.textVertPosition = 0.8;
+        config2.waveAnimateTime = 2000;
+        config2.waveHeight = 0.3;
+        config2.waveCount = 1;
+        function NewValue(){
+            if(Math.random() > .5){
+                return Math.round(Math.random()*100);
+            } else {
+                return (Math.random()*100).toFixed(1);
+            }
+        }
+    </script>
 </body>
 </html>

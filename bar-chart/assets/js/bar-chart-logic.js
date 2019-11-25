@@ -1,8 +1,12 @@
-// const svg = document.getElementById("#bar-chart"),
-const svg = d3.select("svg"),
-margin = {top: 20, right: 20, bottom: 30, left: 40},
-width = +svg.attr("width") - margin.left - margin.right,
-height = +svg.attr("height") - margin.top - margin.bottom,
+function createBarChart() {
+
+const margin = {top: 20, right: 20, bottom: 30, left: 40},
+width = 650 - margin.left - margin.right,
+height = 325 - margin.top - margin.bottom;
+
+const svg = d3.select("#bar-chart").append("svg")
+.attr("width", width + margin.left + margin.right)
+.attr("height", height + margin.top + margin.bottom);
 g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 const tooltip = d3.select("body").append("div").attr("class", "toolTip");
@@ -86,3 +90,6 @@ d3.csv("../../barchart-all-years.csv", function(d, i, columns) {
     .attr("dy", "0.32em")
     .text(function(d) { return d; });
 });
+}
+
+createBarChart();

@@ -18,6 +18,9 @@ text.axis-workweek {
   fill: #000;
 }
 
+body {
+ background-color: #F0F0F0;
+}
 text.axis-worktime {
   fill: #000;
 }

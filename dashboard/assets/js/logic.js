@@ -247,7 +247,7 @@ function createBubbleMap(){
                         fillColor: getColor(activity_type),
                         fillOpacity: 0.85,
                         radius: duration *500
-                    }).bindPopup(`<h2>${title}</h2><hr></hr><h2>distance: ${distance}</h2><hr></hr><h2>duration (mins): ${duration}</h2>`));
+                    }).bindPopup(`<p>${title}</p><hr></hr><p>distance: ${distance}</p><hr></hr><p>duration (mins): ${duration}</p>`));
             } else if (activity_type === 'walking'){
                 walkingMarkers.push(
                     L.circle(location, {
@@ -255,7 +255,7 @@ function createBubbleMap(){
                         fillColor: getColor(activity_type),
                         fillOpacity: 0.85,
                         radius: duration *500
-                    }).bindPopup(`<h2>${title}</h2><hr></hr><h2>distance: ${distance}</h2><hr></hr><h2>duration (mins): ${duration}</h2>`));
+                    }).bindPopup(`<p>${title}</p><hr></hr><p>distance: ${distance}</p><hr></hr><p>duration (mins): ${duration}</p>`));
             } else if (activity_type === 'cycling'){
                 cyclingMarkers.push(
                     L.circle(location, {
@@ -263,7 +263,7 @@ function createBubbleMap(){
                         fillColor: getColor(activity_type),
                         fillOpacity: 0.85,
                         radius: duration *500
-                    }).bindPopup(`<h2>${title}</h2><hr></hr><h2>distance: ${distance}</h2><hr></hr><h2>duration (mins): ${duration}</h2>`));
+                    }).bindPopup(`<p>${title}</p><hr></hr><p>distance: ${distance}</p><hr></hr><p>duration (mins): ${duration}</p>`));
             } else if (activity_type === 'hiking'){
                 hikingMarkers.push(
                     L.circle(location, {
@@ -271,7 +271,7 @@ function createBubbleMap(){
                         fillColor: getColor(activity_type),
                         fillOpacity: 0.85,
                         radius: duration *500
-                    }).bindPopup(`<h2>${title}</h2><hr></hr><h2>distance: ${distance}</h2><hr></hr><h2>duration (mins): ${duration}</h2>`));
+                    }).bindPopup(`<p>${title}</p><hr></hr><p>distance: ${distance}</p><hr></hr><p>duration (mins): ${duration}</p>`));
             } else if (activity_type === 'treadmill_running'){
                 treadmillMarkers.push(
                     L.circle(location, {
@@ -279,7 +279,7 @@ function createBubbleMap(){
                         fillColor: getColor(activity_type),
                         fillOpacity: 0.85,
                         radius: duration *500
-                    }).bindPopup(`<h2>${title}</h2><hr></hr><h2>distance: ${distance}</h2><hr></hr><h2>duration (mins): ${duration}</h2>`));
+                    }).bindPopup(`<p>${title}</p><hr></hr><p>distance: ${distance}</p><hr></hr><p>duration (mins): ${duration}</p>`));
             }
             
         });

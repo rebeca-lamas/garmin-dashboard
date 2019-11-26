@@ -121,75 +121,82 @@ function createBarChart() {
     const z = d3.scaleOrdinal()
     .range(["#f9f3b9", "#38c4bf", "#d28888", "#474ef1", "#a05d56", "#d0743c", "#ff8c00"]);
     
-    d3.json("/api/barchart", function(d, i, columns) {
-        for (var i = 1, n = columns.length; i < n; ++i) d[columns[i]] = +d[columns[i]];
-        return d;
-    }, function(error, data) {
-        if (error) throw error;
-        var keys = data.columns.slice(1);
-        x0.domain(data.map(function(d) { return d.name; }));
+    d3.json("/api/barchart", function(data) {
+        let dict = data.map(function(d) { return {'name': d[0], '2016': d[1], '2017': d[2], '2018': d[3], '2019': d[4]}});
+        console.log(dict);
+        let keys = Object.keys(dict[0]).slice(0,-1);
+        console.log(keys);
+
+        x0.domain(dict.map(function (d) { return d.name; }));
         x1.domain(keys).rangeRound([0, x0.bandwidth()]);
-        y.domain([0, d3.max(data, function(d) { return d3.max(keys, function(key) { return d[key]; }); })]).nice();
+        y.domain([0, d3.max(dict, function (d) { return d3.max(keys, function (key) { return d[key]; }); })]).nice();
+
         g.append("g")
-        .selectAll("g")
-        .data(data)
-        .enter().append("g")
-        .attr("transform", function(d) { return "translate(" + x0(d.name) + ",0)"; })
-        .selectAll("rect")
-        .data(function(d) { return keys.map(function(key) { return {key: key, value: d[key], name: d.name}; }); })
-        .enter().append("rect")
-        .attr("x", function(d) { return x1(d.key); })
-        .attr("y", function(d) { return y(d.value); })
-        .attr("width", x1.bandwidth())
-        .attr("height", function(d) { return height - y(d.value); })
-        .attr("fill", function(d) { return z(d.key); })
-        .on("mouseover", function(d){
-            tooltip
-            .style("left", d3.event.pageX - 50 + "px")
-            .style("top", d3.event.pageY - 70 + "px")
-            .style("display", "inline-block")
-            .html((d.name) + " " + (d.key) + "<br>" + (d.value) + " workouts");
-        })
-        .on("mouseout", function(d){ tooltip.style("display", "none");});
+            .selectAll("g")
+            .data(dict)
+            .enter().append("g")
+            .attr("transform", function (d) { return "translate(" + x0(d.name) + ",0)"; })
+            .selectAll("rect")
+            .data(function (d) { 
+            return keys.map(function (key) { 
+            	return { key: key, value: d[key]}; 
+             	}); 
+             })
+            .enter().append("rect")
+            .attr("x", function (d) { return x1(d.key); })
+            .attr("y", function (d) { return y(d.value); })
+            .attr("width", x1.bandwidth())
+            .attr("height", function (d) { return height - y(d.value); })
+            .attr("fill", function (d) { return z(d.key); })
+            .on("mouseover", function(d){
+                tooltip
+                .style("left", d3.event.pageX - 50 + "px")
+                .style("top", d3.event.pageY - 70 + "px")
+                .style("display", "inline-block")
+                .html((d.value) + " workouts");
+            })
+            .on("mouseout", function(d){ tooltip.style("display", "none");});
         
+            g.append("g")
+            .attr("class", "axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x0));
+
         g.append("g")
-        .attr("class", "axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x0));
+            .attr("class", "axis")
+            .call(d3.axisLeft(y).ticks(null, "s"))
+            .append("text")
+            .attr("x", 2)
+            .attr("y", y(y.ticks().pop()) + 0.5)
+            .attr("dy", "0.32em")
+            .attr("fill", "#000")
+            .attr("font-weight", "bold")
+            .attr("text-anchor", "start");
         
-        g.append("g")
-        .attr("class", "axis")
-        .call(d3.axisLeft(y).ticks(null, "s"))
-        .append("text")
-        .attr("x", 2)
-        .attr("y", y(y.ticks().pop()) + 0.5)
-        .attr("dy", "0.32em")
-        .attr("fill", "#000")
-        .attr("font-weight", "bold")
-        .attr("text-anchor", "start");
-        
-        const legend = g.append("g")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", 10)
-        .attr("text-anchor", "end")
-        .selectAll("g")
-        .data(keys.slice().reverse())
-        .enter().append("g")
-        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+        var legend = g.append("g")
+            .attr("font-family", "sans-serif")
+            .attr("font-size", 10)
+            .attr("text-anchor", "end")
+            .selectAll("g")
+            .data(keys.slice().reverse())
+            .enter().append("g")
+            .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; });
+
         legend.append("rect")
-        .attr("x", width - 19)
-        .attr("width", 19)
-        .attr("height", 19)
-        .attr("fill", z);
+            .attr("x", width - 19)
+            .attr("width", 19)
+            .attr("height", 19)
+            .attr("fill", z);
+
         legend.append("text")
-        .attr("x", width - 24)
-        .attr("y", 9.5)
-        .attr("dy", "0.32em")
-        .text(function(d) { return d; });
-    console.log('created bar chart');
+            .attr("x", width - 24)
+            .attr("y", 9.5)
+            .attr("dy", "0.32em")
+            .text(function (d) { return d; });
     });
-    }
-    
+    console.log('created bar chart');
+};
+createBarChart();
     
 function createBubbleMap(){
     let activity_type;
@@ -297,7 +304,7 @@ function createBubbleMap(){
     
     });    
     console.log('created bubble map');
-}
+};
 
 function createTable() {
     d3.csv('../../resources/data/beca_activities.csv', data => {
@@ -316,6 +323,7 @@ function createTable() {
             });
         });
     });
+  console.log('created table');
 };
 
 function animation(){
@@ -326,8 +334,6 @@ function animation(){
     var bgColor = "#FF6138";
     var animations = [];
     var circles = [];
-    // ctx.font = "60px Arial";
-    // ctx.fillText("Garmin Fitness Dashboard", (c.width / 2) - 17, (c.height / 2) + 8);
     
     var colorPicker = (function() {
       var colors = ["#FF6138", "#FFBE53", "#2980B9", "#282741"];
@@ -489,8 +495,7 @@ function animation(){
     (function init() {
       resizeCanvas();
       if (window.CP) {
-        // CodePen's loop detection was causin' problems
-        // and I have no idea why, so...
+
         window.CP.PenTimer.MAX_TIME_IN_LOOP_WO_EXIT = 6000; 
       }
       window.addEventListener("resize", resizeCanvas);
@@ -531,8 +536,8 @@ function animation(){
     }
 };
 
-createWeekHeatmap();
-createBarChart();
-createBubbleMap();
-createTable();
+// createWeekHeatmap();
+// createBarChart();
+// createBubbleMap();
+// createTable();
 animation();

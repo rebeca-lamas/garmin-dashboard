@@ -121,7 +121,7 @@ function createBarChart() {
     const z = d3.scaleOrdinal()
     .range(["#f9f3b9", "#38c4bf", "#d28888", "#474ef1", "#a05d56", "#d0743c", "#ff8c00"]);
     
-    d3.csv("../../resources/data/barchart-all-years.csv", function(d, i, columns) {
+    d3.json("/api/barchart", function(d, i, columns) {
         for (var i = 1, n = columns.length; i < n; ++i) d[columns[i]] = +d[columns[i]];
         return d;
     }, function(error, data) {
@@ -143,7 +143,7 @@ function createBarChart() {
         .attr("width", x1.bandwidth())
         .attr("height", function(d) { return height - y(d.value); })
         .attr("fill", function(d) { return z(d.key); })
-        .on("mousemove", function(d){
+        .on("mouseover", function(d){
             tooltip
             .style("left", d3.event.pageX - 50 + "px")
             .style("top", d3.event.pageY - 70 + "px")

@@ -22,5 +22,29 @@ def bar():
   print(bar_data)
   return jsonify(bar_data)
 
+@app.route("/api/map")
+def map():
+  pg_mapdata = "select * FROM mapdata"
+  cursor.execute(pg_mapdata)
+  map_data = cursor.fetchall()
+  print(map_data)
+  return jsonify(map_data) 
+
+@app.route("/api/weekly")
+def week():
+  pg_weeklydata = "select * FROM weeklydata"
+  cursor.execute(pg_weeklydata)
+  weekly_data = cursor.fetchall()
+  print(weekly_data)
+  return jsonify(weekly_data)
+
+@app.route("/api/yearly")
+def year():
+  pg_yearlydata = "select * FROM yearlydata"
+  cursor.execute(pg_yearlydata)
+  yearly_data = cursor.fetchall()
+  print(yearly_data)
+  return jsonify(yearly_data)    
+
 if __name__ == "__main__":
   app.run()

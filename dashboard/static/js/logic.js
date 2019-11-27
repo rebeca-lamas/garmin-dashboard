@@ -1,3 +1,5 @@
+// weekly heat  map
+
 function createWeekHeatmap() {
     const margin = { top: 50, right: 0, bottom: 100, left: 30 },
 width = 960 - margin.left - margin.right,
@@ -35,13 +37,12 @@ const timeLabels = svg.selectAll(".timeLabel")
 .attr("transform", "translate(" + gridSize / 2 + ", -6)")
 .attr("class", function(d, i) { return ((i >= 7 && i <= 16) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis"); });
 
-const heatmapChart = function(csvFile) {
-    d3.csv(csvFile,
-    function(d) {
+  d3.json("/api/weekly",
+    function(data) {
         return {
-            day: +d.day,
-            hour: +d.hour,
-            values: +d.values
+            day: +data.day,
+            hour: +data.hour,
+            values: +data.values
         };
     },
     function(error, data) {
@@ -50,7 +51,7 @@ const heatmapChart = function(csvFile) {
         .range(colors);
         
         const cards = svg.selectAll(".hour")
-        .data(data, function(d) {return d.day+':'+d.hour;});
+        .data(data, function(data) {return d.day+':'+d.hour;});
         
         cards.append("title");
         
@@ -62,14 +63,14 @@ const heatmapChart = function(csvFile) {
         .attr("class", "hour bordered")
         .attr("width", gridSize)
         .attr("height", gridSize)
-        .style("fill", function(d) { return colorScale(d.values); });
+        .style("fill", function(data) { return colorScale(d.values); });
         
-        cards.select("title").text(function(d) { return d.values; });
+        cards.select("title").text(function(data) { return d.values; });
         
         cards.exit().remove();
         
         const legend = svg.selectAll(".legend")
-            .data([0].concat(colorScale.quantiles()), function(d) { return d; });
+            .data([0].concat(colorScale.quantiles()), function(data) { return d; });
 
         legend.enter().append("g")
             .attr("class", "legend");
@@ -91,10 +92,10 @@ const heatmapChart = function(csvFile) {
         console.log('created week heatmap');
     });  
 };
-const csv = '../../resources/data/day-hour.csv';
-heatmapChart(csv); 
-}
+const json = '/api/weekly';
+createWeekHeatmap(json); 
 
+// Bar chart/histo
 function createBarChart() {
 
     const margin = {top: 20, right: 20, bottom: 30, left: 40},
@@ -197,7 +198,7 @@ function createBarChart() {
     console.log('created bar chart');
 };
 createBarChart();
-    
+    // Map
 function createBubbleMap(){
     let activity_type;
 
@@ -231,7 +232,7 @@ function createBubbleMap(){
         collapsed: false
       }).addTo(myMap);
     
-    d3.csv('../../resources/data/map-data.csv', data => {
+    d3.json('/api/map', function(data) {
         const runningMarkers = [];
         const walkingMarkers = [];
         const cyclingMarkers = [];
@@ -305,9 +306,9 @@ function createBubbleMap(){
     });    
     console.log('created bubble map');
 };
-
+// table
 function createTable() {
-    d3.csv('../../resources/data/beca_activities.csv', data => {
+    d3.json('api/activites', function(data) {
         const thead_tr = d3.select('thead').append('tr');
         const column_names = Object.keys(data[0]);
         column_names.forEach(name => {

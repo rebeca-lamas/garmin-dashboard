@@ -30,6 +30,7 @@ d3.csv("../../barchart-all-years.csv", function(d, i, columns) {
 }, function(error, data) {
     if (error) throw error;
     var keys = data.columns.slice(1);
+    console.log(data);
     x0.domain(data.map(function(d) { return d.name; }));
     x1.domain(keys).rangeRound([0, x0.bandwidth()]);
     y.domain([0, d3.max(data, function(d) { return d3.max(keys, function(key) { return d[key]; }); })]).nice();
@@ -46,7 +47,7 @@ d3.csv("../../barchart-all-years.csv", function(d, i, columns) {
     .attr("width", x1.bandwidth())
     .attr("height", function(d) { return height - y(d.value); })
     .attr("fill", function(d) { return z(d.key); })
-    .on("mousemove", function(d){
+    .on("mouseover", function(d){
         tooltip
         .style("left", d3.event.pageX - 50 + "px")
         .style("top", d3.event.pageY - 70 + "px")

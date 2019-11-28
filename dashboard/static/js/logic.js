@@ -39,61 +39,55 @@ const timeLabels = svg.selectAll(".timeLabel")
 
   d3.json("/api/weekly",
     function(data) {
-        return {
-            day: +data.day,
-            hour: +data.hour,
-            values: +data.values
-        };
-    },
-    function(error, data) {
-        const colorScale = d3.scaleQuantile()
-        .domain([0, buckets - 1, d3.max(data, function (d) { return d.values; })])
-        .range(colors);
-        
-        const cards = svg.selectAll(".hour")
-        .data(data, function(data) {return d.day+':'+d.hour;});
-        
-        cards.append("title");
-        
-        cards.enter().append("rect")
-        .attr("x", function(d) { return (d.hour - 1) * gridSize; })
-        .attr("y", function(d) { return (d.day - 1) * gridSize; })
-        .attr("rx", 4)
-        .attr("ry", 4)
-        .attr("class", "hour bordered")
-        .attr("width", gridSize)
-        .attr("height", gridSize)
-        .style("fill", function(data) { return colorScale(d.values); });
-        
-        cards.select("title").text(function(data) { return d.values; });
-        
-        cards.exit().remove();
-        
-        const legend = svg.selectAll(".legend")
-            .data([0].concat(colorScale.quantiles()), function(data) { return d; });
+      // console.log(data);
+      let dict = data.map(function(d) { return {'day': d[0], 'hour': d[1], 'values': d[2]}});
+      console.log(dict);
+      const colorScale = d3.scaleQuantile()
+      .domain([0, buckets - 1, d3.max(dict, function (d) { return d.values; })])
+      .range(colors);
+      
+      const cards = svg.selectAll(".hour")
+      .data(dict, function(d) {return d.day+':'+d.hour;});
+      
+      cards.append("title");
+      
+      cards.enter().append("rect")
+      .attr("x", function(d) { return (d.hour - 1) * gridSize; })
+      .attr("y", function(d) { return (d.day - 1) * gridSize; })
+      .attr("rx", 4)
+      .attr("ry", 4)
+      .attr("class", "hour bordered")
+      .attr("width", gridSize)
+      .attr("height", gridSize)
+      .style("fill", function(d) { return colorScale(d.values); });
+      
+      cards.select("title").text(function(data) { return d.values; });
+      
+      cards.exit().remove();
+      
+      const legend = svg.selectAll(".legend")
+          .data([0].concat(colorScale.quantiles()), function(d) { return d; });
 
-        legend.enter().append("g")
-            .attr("class", "legend");
+      legend.enter().append("g")
+          .attr("class", "legend");
 
-        legend.enter().append("rect")
-            .attr("x", function(d, i) { return legendElementWidth * i; })
-            .attr("y", height)
-            .attr("width", legendElementWidth)
-            .attr("height", gridSize / 2)
-            .style("fill", function(d, i) { return colors[i]; });
-        
-        legend.enter().append("text")
-            .attr("class", "mono")
-            .text(function(d) { return "≥ " + Math.round(d); })
-            .attr("x", function(d, i) { return legendElementWidth * i; })
-            .attr("y", height + gridSize);
-        
-        legend.exit().remove();
-        console.log('created week heatmap');
-    });  
+      legend.enter().append("rect")
+          .attr("x", function(d, i) { return legendElementWidth * i; })
+          .attr("y", height)
+          .attr("width", legendElementWidth)
+          .attr("height", gridSize / 2)
+          .style("fill", function(d, i) { return colors[i]; });
+      
+      legend.enter().append("text")
+          .attr("class", "mono")
+          .text(function(d) { return "≥ " + Math.round(d); })
+          .attr("x", function(d, i) { return legendElementWidth * i; })
+          .attr("y", height + gridSize);
+      
+      legend.exit().remove();
+      console.log('created week heatmap');
+    }); 
 };
-const json = '/api/weekly';
-createWeekHeatmap(json); 
 
 // Bar chart/histo
 function createBarChart() {
@@ -120,14 +114,14 @@ function createBarChart() {
   .rangeRound([height, 0]);
   
   const z = d3.scaleOrdinal()
-  .range(["#f9f3b9", "#38c4bf", "#d28888", "#474ef1", "#a05d56", "#d0743c", "#ff8c00"]);
+  .range(["#FFE599", "#38c4bf", "#d28888", "#474ef1", "#a05d56", "#d0743c", "#ff8c00"]);
   
   d3.json("/api/barchart", function(data) {
       let dict = data.map(function(d) { return {'name': d[0], '2016': d[1], '2017': d[2], '2018': d[3], '2019': d[4]}});
       // console.log(data);
-      console.log(dict);
+      // console.log(dict);
       let keys = Object.keys(dict[0]).slice(0,-1);
-      console.log(keys);
+      // console.log(keys);
 
       x0.domain(dict.map(function (d) { return d.name; }));
       x1.domain(keys).rangeRound([0, x0.bandwidth()]);
@@ -198,7 +192,6 @@ function createBarChart() {
   });
   console.log('created bar chart');
 };
-createBarChart();
     // Map
 function createBubbleMap(){
     let activity_type;
@@ -311,21 +304,22 @@ function createBubbleMap(){
 function createTable() {
    
   d3.json('/api/activities', function(data) {
-        // const thead_tr = d3.select('thead').append('tr');
-        console.log(data);
-        // const column_names = Object.keys(data[0]);
-        // column_names.forEach(name => {
-        //     thead_tr.append('th').text(name);
-        // });
+        const thead_tr = d3.select('thead').append('tr');
+        // console.log(data);
+        const column_names = ["Activity Type", "Date", "Title", "Distance", "Calories", "Duration", "Average HR", 
+          "Max HR", "Average Pace", "Best Pace", "Steps", "Start Latitude", "Start Longitude"];
+        column_names.forEach(name => {
+            thead_tr.append('th').text(name);
+        });
     
-        // const tbody = d3.select("tbody");    
+        const tbody = d3.select("tbody");    
     
-        // data.forEach(activity =>{
-        //     const tr = tbody.append("tr");
-        //     Object.entries(activity).forEach(([key, value]) => {
-        //         tr.append("td").text(value);
-        //     });
-        // });
+        data.forEach(activity =>{
+            const tr = tbody.append("tr");
+            Object.entries(activity).forEach(([key, value]) => {
+                tr.append("td").text(value);
+            });
+        });
     });
   console.log('created table');
 };
@@ -540,8 +534,8 @@ function animation(){
     }
 };
 
-// createWeekHeatmap();
-// createBarChart();
+createWeekHeatmap();
+createBarChart();
 // createBubbleMap();
-// createTable();
+createTable();
 animation();

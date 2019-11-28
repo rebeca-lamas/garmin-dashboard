@@ -95,3 +95,11 @@ canvas {
   color: white;
   font-size: 80px;
 }
+
+#table {
+  background-color: white;
+}
+
+.row {
+  margin: 15px;
+}

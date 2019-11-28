@@ -50,7 +50,9 @@ const timeLabels = svg.selectAll(".timeLabel")
       .data(dict, function(d) {return d.day+':'+d.hour;});
       
       cards.append("title");
-      
+
+      const tooltip = d3.select("body").append("div").attr("class", "toolTip");
+
       cards.enter().append("rect")
       .attr("x", function(d) { return (d.hour - 1) * gridSize; })
       .attr("y", function(d) { return (d.day - 1) * gridSize; })
@@ -59,7 +61,15 @@ const timeLabels = svg.selectAll(".timeLabel")
       .attr("class", "hour bordered")
       .attr("width", gridSize)
       .attr("height", gridSize)
-      .style("fill", function(d) { return colorScale(d.values); });
+      .style("fill", function(d) { return colorScale(d.values); })
+      .on("mouseover", function(d){
+        tooltip
+        .style("left", d3.event.pageX - 50 + "px")
+        .style("top", d3.event.pageY - 50 + "px")
+        .style("display", "inline-block")
+        .html((d.values) + " workouts");
+    })
+    .on("mouseout", function(d){ tooltip.style("display", "none");});;
       
       cards.select("title").text(function(data) { return d.values; });
       

@@ -41,7 +41,7 @@ const timeLabels = svg.selectAll(".timeLabel")
     function(data) {
       // console.log(data);
       let dict = data.map(function(d) { return {'day': d[0], 'hour': d[1], 'values': d[2]}});
-      console.log(dict);
+      // console.log(dict);
       const colorScale = d3.scaleQuantile()
       .domain([0, buckets - 1, d3.max(dict, function (d) { return d.values; })])
       .range(colors);
@@ -89,7 +89,7 @@ const timeLabels = svg.selectAll(".timeLabel")
     }); 
 };
 
-// Bar chart/histo
+// Bar chart
 function createBarChart() {
 
   const margin = {top: 20, right: 20, bottom: 30, left: 40},
@@ -232,8 +232,10 @@ function createBubbleMap(){
         const cyclingMarkers = [];
         const hikingMarkers = [];
         const treadmillMarkers = [];
-    
-        data.forEach(activity => {
+        let dict = data.map(function(d) { return {'activity_type': d[0], 'title': d[1], 'distance': d[2], 
+          'start_latitude': d[3], 'start_longitude': d[4], "total_time": d[5]}});
+      
+        dict.forEach(activity => {
             let latitude = activity.start_latitude;
             let longitude = activity.start_longitude;
             let location = [latitude, longitude];
@@ -536,6 +538,6 @@ function animation(){
 
 createWeekHeatmap();
 createBarChart();
-// createBubbleMap();
+createBubbleMap();
 createTable();
 animation();

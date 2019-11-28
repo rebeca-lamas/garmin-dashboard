@@ -10,7 +10,7 @@ CREATE TABLE activities(
 	"activity_type" varchar NOT NULL,
 	"date" date NOT NULL,
 	"title" varchar NOT NULL,
-	"distance" decimal,
+	"distance" float,
 	"calories" int,
 	"duration" varchar NOT NULL,
 	"avg_hr" int,
@@ -18,8 +18,8 @@ CREATE TABLE activities(
 	"avg_pace" varchar,
 	"best_pace" varchar,
 	"steps" int,
-	"start_latitude" decimal,
-	"start_longitude" decimal
+	"start_latitude" float,
+	"start_longitude" float
 );
 
 CREATE TABLE weeklydata(
@@ -36,8 +36,8 @@ CREATE TABLE yearlydata(
 CREATE TABLE mapdata(
 	"activity_type" varchar NOT NULL,
 	"title" varchar NOT NULL,
-	"distance" decimal NOT NULL,
-	"start_latitude" decimal NOT NULL,
-	"start_longitude" decimal NOT NULL,
+	"distance" float NOT NULL,
+	"start_latitude" float NOT NULL,
+	"start_longitude" float NOT NULL,
 	"total_time" varchar NOT NULL
 );

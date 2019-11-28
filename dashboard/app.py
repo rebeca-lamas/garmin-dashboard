@@ -46,8 +46,8 @@ def year():
   print(yearly_data)
   return jsonify(yearly_data)    
 
-@app.route("/api/activites")
-def activites():
+@app.route("/api/activities")
+def activities():
   pg_activities = "select * FROM activities"
   cursor.execute(pg_activities)
   activity_data = cursor.fetchall()

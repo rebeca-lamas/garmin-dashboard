@@ -37,7 +37,7 @@ const timeLabels = svg.selectAll(".timeLabel")
 const heatmapChart = function(csvFile) {
     d3.csv(csvFile,
     function(d) {
-        console.log(d);
+        // console.log(d);
         return {
             day: +d.day,
             hour: +d.hour,
@@ -45,6 +45,7 @@ const heatmapChart = function(csvFile) {
         };
     },
     function(error, data) {
+        console.log(data);
         const colorScale = d3.scaleQuantile()
         .domain([0, buckets - 1, d3.max(data, function (d) { return d.values; })])
         .range(colors);

@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, jsonify
 from flask_json import FlaskJSON, JsonError, json_response, as_json
 import psycopg2
 # uuse psycopg2 to set up connection to db
-conn = psycopg2.connect(host="localhost",database="garmin", user="postgres", password="postgres")
+conn = psycopg2.connect(host="localhost",database="Project2", user="postgres", password="postgres")
 
 cursor = conn.cursor()
 print( conn.get_dsn_parameters(), )

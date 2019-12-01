@@ -5,8 +5,8 @@ const width = 900,
     month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 	
 const day = d3.time.format("%w"),
-    week = d3.time.format("%U"),
-    percent = d3.format(".1%"),
+  week = d3.time.format("%U"),
+  percent = d3.format(".1%"),
 	format = d3.time.format("%Y%m%d");
 	parseDate = d3.time.format("%Y%m%d").parse;
 		

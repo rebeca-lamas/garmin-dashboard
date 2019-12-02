@@ -40,14 +40,13 @@ const timeLabels = svg.selectAll(".timeLabel")
   d3.json("/api/weekly",
     function(data) {
       // console.log(data);
-      let dict = data.map(function(d) { return {'day': d[0], 'hour': d[1], 'values': d[2]}});
       // console.log(dict);
       const colorScale = d3.scaleQuantile()
-      .domain([0, buckets - 1, d3.max(dict, function (d) { return d.values; })])
+      .domain([0, buckets - 1, d3.max(data, function (d) { return d.values; })])
       .range(colors);
       
       const cards = svg.selectAll(".hour")
-      .data(dict, function(d) {return d.day+':'+d.hour;});
+      .data(data, function(d) {return d.day+':'+d.hour;});
       
       cards.append("title");
 
@@ -127,19 +126,18 @@ function createBarChart() {
   .range(["#FFE599", "#38c4bf", "#d28888", "#474ef1", "#a05d56", "#d0743c", "#ff8c00"]);
   
   d3.json("/api/barchart", function(data) {
-      let dict = data.map(function(d) { return {'name': d[0], '2016': d[1], '2017': d[2], '2018': d[3], '2019': d[4]}});
       // console.log(data);
       // console.log(dict);
-      let keys = Object.keys(dict[0]).slice(0,-1);
+      let keys = Object.keys(data[0]).slice(0,-1);
       // console.log(keys);
 
-      x0.domain(dict.map(function (d) { return d.name; }));
+      x0.domain(data.map(function (d) { return d.name; }));
       x1.domain(keys).rangeRound([0, x0.bandwidth()]);
-      y.domain([0, d3.max(dict, function (d) { return d3.max(keys, function (key) { return d[key]; }); })]).nice();
+      y.domain([0, d3.max(data, function (d) { return d3.max(keys, function (key) { return d[key]; }); })]).nice();
 
       g.append("g")
           .selectAll("g")
-          .data(dict)
+          .data(data)
           .enter().append("g")
           .attr("transform", function (d) { return "translate(" + x0(d.name) + ",0)"; })
           .selectAll("rect")
@@ -179,7 +177,7 @@ function createBarChart() {
           .attr("font-weight", "bold")
           .attr("text-anchor", "start");
       
-      var legend = g.append("g")
+      let legend = g.append("g")
           .attr("font-family", "sans-serif")
           .attr("font-size", 10)
           .attr("text-anchor", "end")
@@ -242,10 +240,8 @@ function createBubbleMap(){
         const cyclingMarkers = [];
         const hikingMarkers = [];
         const treadmillMarkers = [];
-        let dict = data.map(function(d) { return {'activity_type': d[0], 'title': d[1], 'distance': d[2], 
-          'start_latitude': d[3], 'start_longitude': d[4], "total_time": d[5]}});
       
-        dict.forEach(activity => {
+        data.forEach(activity => {
             let latitude = activity.start_latitude;
             let longitude = activity.start_longitude;
             let location = [latitude, longitude];
@@ -316,10 +312,11 @@ function createBubbleMap(){
 function createTable() {
    
   d3.json('/api/activities', function(data) {
+    // console.log(data);
         const thead_tr = d3.select('thead').append('tr');
         // console.log(data);
-        const column_names = ["Activity Type", "Date", "Title", "Distance", "Calories", "Duration", "Average HR", 
-          "Max HR", "Average Pace", "Best Pace", "Steps", "Start Latitude", "Start Longitude"];
+        const column_names = Object.keys(data[0]);
+        // console.log(column_names);
         column_names.forEach(name => {
             thead_tr.append('th').text(name);
         });
@@ -337,17 +334,17 @@ function createTable() {
 };
 
 function animation(){
-    var c = document.getElementById("c");
-    var ctx = c.getContext("2d");
-    var cH;
-    var cW;
-    var bgColor = "#FF6138";
-    var animations = [];
-    var circles = [];
+    let c = document.getElementById("c");
+    let ctx = c.getContext("2d");
+    let cH;
+    let cW;
+    let bgColor = "#FF6138";
+    let animations = [];
+    let circles = [];
     
-    var colorPicker = (function() {
-      var colors = ["#FF6138", "#FFBE53", "#2980B9", "#282741"];
-      var index = 0;
+    let colorPicker = (function() {
+      let colors = ["#FF6138", "#FFBE53", "#2980B9", "#282741"];
+      let index = 0;
       function next() {
         index = index++ < colors.length-1 ? index : 0;
         return colors[index];
@@ -362,13 +359,13 @@ function animation(){
     })();
     
     function removeAnimation(animation) {
-      var index = animations.indexOf(animation);
+      let index = animations.indexOf(animation);
       if (index > -1) animations.splice(index, 1);
     }
     
     function calcPageFillRadius(x, y) {
-      var l = Math.max(x - 0, cW - x);
-      var h = Math.max(y - 0, cH - y);
+      let l = Math.max(x - 0, cW - x);
+      let h = Math.max(y - 0, cH - y);
       return Math.sqrt(Math.pow(l, 2) + Math.pow(h, 2));
     }
     
@@ -382,19 +379,19 @@ function animation(){
           e.preventDefault();
           e = e.touches[0];
         }
-        var currentColor = colorPicker.current();
-        var nextColor = colorPicker.next();
-        var targetR = calcPageFillRadius(e.pageX, e.pageY);
-        var rippleSize = Math.min(200, (cW * .4));
-        var minCoverDuration = 750;
+        let currentColor = colorPicker.current();
+        let nextColor = colorPicker.next();
+        let targetR = calcPageFillRadius(e.pageX, e.pageY);
+        let rippleSize = Math.min(200, (cW * .4));
+        let minCoverDuration = 750;
         
-        var pageFill = new Circle({
+        let pageFill = new Circle({
           x: e.pageX,
           y: e.pageY,
           r: 0,
           fill: nextColor
         });
-        var fillAnimation = anime({
+        let fillAnimation = anime({
           targets: pageFill,
           r: targetR,
           duration:  Math.max(targetR / 2 , minCoverDuration ),
@@ -405,7 +402,7 @@ function animation(){
           }
         });
         
-        var ripple = new Circle({
+        let ripple = new Circle({
           x: e.pageX,
           y: e.pageY,
           r: 0,
@@ -416,7 +413,7 @@ function animation(){
           },
           opacity: 1
         });
-        var rippleAnimation = anime({
+        let rippleAnimation = anime({
           targets: ripple,
           r: rippleSize,
           opacity: 0,
@@ -425,9 +422,9 @@ function animation(){
           complete: removeAnimation
         });
         
-        var particles = [];
-        for (var i=0; i<32; i++) {
-          var particle = new Circle({
+        let particles = [];
+        for (let i=0; i<32; i++) {
+          let particle = new Circle({
             x: e.pageX,
             y: e.pageY,
             fill: currentColor,
@@ -435,7 +432,7 @@ function animation(){
           })
           particles.push(particle);
         }
-        var particlesAnimation = anime({
+        let particlesAnimation = anime({
           targets: particles,
           x: function(particle){
             return particle.x + anime.random(rippleSize, -rippleSize);
@@ -452,7 +449,7 @@ function animation(){
     }
     
     function extend(a, b){
-      for(var key in b) {
+      for(let key in b) {
         if(b.hasOwnProperty(key)) {
           a[key] = b[key];
         }
@@ -460,7 +457,7 @@ function animation(){
       return a;
     }
     
-    var Circle = function(opts) {
+    let Circle = function(opts) {
       extend(this, opts);
     }
     
@@ -481,7 +478,7 @@ function animation(){
       ctx.globalAlpha = 1;
     }
     
-    var animate = anime({
+    let animate = anime({
       duration: Infinity,
       update: function() {
         ctx.fillStyle = bgColor;
@@ -494,7 +491,7 @@ function animation(){
       }
     });
     
-    var resizeCanvas = function() {
+    let resizeCanvas = function() {
       cW = window.innerWidth;
       cH = window.innerHeight;
       c.width = cW * devicePixelRatio;
@@ -517,7 +514,7 @@ function animation(){
     })();
     
     function handleInactiveUser() {
-      var inactive = setTimeout(function(){
+      let inactive = setTimeout(function(){
         fauxClick(cW/2, cH/2);
       }, 2000);
       
@@ -539,15 +536,15 @@ function animation(){
     }
     
     function fauxClick(x, y) {
-      var fauxClick = new Event("mousedown");
+      let fauxClick = new Event("mousedown");
       fauxClick.pageX = x;
       fauxClick.pageY = y;
       document.dispatchEvent(fauxClick);
     }
 };
 
+createBubbleMap();
 createWeekHeatmap();
 createBarChart();
-createBubbleMap();
 createTable();
 animation();

@@ -102,8 +102,8 @@ const timeLabels = svg.selectAll(".timeLabel")
 function createBarChart() {
 
   const margin = {top: 20, right: 20, bottom: 30, left: 40},
-  width = 650 - margin.left - margin.right,
-  height = 325 - margin.top - margin.bottom;
+  width = 960 - margin.left - margin.right,
+  height = 430 - margin.top - margin.bottom;
   
   const svg = d3.select("#bar-chart").append("svg")
   .attr("width", width + margin.left + margin.right)

@@ -11,11 +11,7 @@ The bubble map shows all the workouts on a map. The size of the bubble is determ
 A table is displayed at the bottom on the webpage so that you can further examine the data if you desire. 
 
 The JavaScript library called Anime was used to create the header. D3 and leaflet were used to create the different visualizations. A flask app is serving up the webpage and the visualizations pull their data from the following API endpoints: 
-
-  /api/weekly
-  
-  /api/barchart
-  
-  /api/map
-  
-  /api/activities
+* /api/weekly
+* /api/barchart
+* /api/map
+* /api/activities

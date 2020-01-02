@@ -13,6 +13,9 @@ A table is displayed at the bottom on the webpage so that you can further examin
 The JavaScript library called Anime was used to create the header. D3 and leaflet were used to create the different visualizations. A flask app is serving up the webpage and the visualizations pull their data from the following API endpoints: 
 
   /api/weekly
+  
   /api/barchart
+  
   /api/map
+  
   /api/activities

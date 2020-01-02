@@ -1,1 +1,1 @@
-# project-2
+# Garmin Fitness Tracker Dashboard

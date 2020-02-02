@@ -103,3 +103,67 @@ canvas {
 .row {
   margin: 15px;
 }
+
+@media screen and (min-width: 1400px) and (max-width: 1600px){
+  #title{
+    font-size: 72px;
+  }
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1399px){
+  #title{
+    font-size: 50px;
+    top: 60px;
+    left: 60px;
+  }
+  canvas {
+    height: 200px;
+  }
+}
+
+@media screen and (min-width: 1000px) and (max-width: 1199px){
+  #title{
+    font-size: 40px;
+    top: 60px;
+    left: 60px;
+  }
+  canvas {
+    height: 175px;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 999px){
+  #title{
+    font-size: 40px;
+    top: 60px;
+    left: 30px;
+  }
+  canvas {
+    height: 175px;
+  }
+}
+
+@media screen and (min-width: 500px) and (max-width: 767px){
+  #title{
+    font-size: 40px;
+    top: 30px;
+    left: 30px;
+  }
+  canvas {
+    height: 150px;
+  }
+}
+
+@media screen and (min-width: 400px) and (max-width: 499px){
+  #title{
+    font-size: 30px;
+    top: 30px;
+    left: 20px;
+  }
+  canvas {
+    height: 125px;
+  }
+}
+
+svg {
+}
